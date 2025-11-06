@@ -18,8 +18,6 @@ st.markdown("""
         background-repeat: no-repeat;
         background-attachment: fixed;
     }
-    </style>
-""", unsafe_allow_html=True)
 
     /* Sidebar styling */
     [data-testid="stSidebar"] {
@@ -216,6 +214,7 @@ if st.button("🔮 Predict Weather"):
 
     st.markdown("### 🌡️ Generated Weather Features")
     st.json(weather_data)
+
 
 
 
