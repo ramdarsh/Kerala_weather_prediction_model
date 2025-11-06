@@ -11,9 +11,6 @@ st.set_page_config(page_title="Kerala Smart Weather Predictor", page_icon="🌦�
 # -------------------- CUSTOM STYLING --------------------
 st.markdown("""
     <style>
-    /* Background gradient */
-    st.markdown("""
-    <style>
     [data-testid="stAppViewContainer"] {
         background-image: url("https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?_gl=1*p98tuv*_ga*NzQ4Mjk5OTI0LjE3NjI0MDYzMjc.*_ga_8JE65Q40S6*czE3NjI0MDYzMjYkbzEkZzAkdDE3NjI0MDYzMjckajU5JGwwJGgw");
         background-size: cover;
@@ -23,7 +20,6 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
 
     /* Sidebar styling */
     [data-testid="stSidebar"] {
@@ -220,6 +216,7 @@ if st.button("🔮 Predict Weather"):
 
     st.markdown("### 🌡️ Generated Weather Features")
     st.json(weather_data)
+
 
 
 
