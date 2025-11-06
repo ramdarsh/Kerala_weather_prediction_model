@@ -22,7 +22,7 @@ st.markdown("""
         background-attachment: fixed;
     }
     </style>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 
     /* Sidebar styling */
@@ -220,4 +220,5 @@ if st.button("🔮 Predict Weather"):
 
     st.markdown("### 🌡️ Generated Weather Features")
     st.json(weather_data)
+
 
