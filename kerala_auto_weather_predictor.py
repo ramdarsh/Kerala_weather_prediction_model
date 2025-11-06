@@ -1,20 +1,98 @@
-# 🌴 Kerala Smart Weather Predictor (District + Future Date Only)
-
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import LabelEncoder
 import datetime
-import math
 
-st.set_page_config(page_title="Kerala Smart Weather Predictor", page_icon="🌦️")
+# -------------------- PAGE CONFIG --------------------
+st.set_page_config(page_title="Kerala Smart Weather Predictor", page_icon="🌦️", layout="centered")
 
-st.title("🌴 Kerala Weather Prediction System")
+# -------------------- CUSTOM STYLING --------------------
 st.markdown("""
-### Enter only the **District** and **Date**, and get the predicted weather 🌤️  
-Model trained on 20,000+ Kerala weather samples across all 14 districts.
+    <style>
+    /* Background gradient */
+    [data-testid="stAppViewContainer"] {
+        background: linear-gradient(to bottom right, #a8edea, #fed6e3);
+        background-attachment: fixed;
+    }
+
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {
+        background-color: rgba(255,255,255,0.8);
+        backdrop-filter: blur(10px);
+        border-right: 2px solid rgba(255,255,255,0.3);
+    }
+
+    /* Title */
+    .title {
+        text-align: center;
+        font-size: 2.4rem;
+        color: #004d40;
+        font-weight: 700;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        margin-bottom: 0.2rem;
+    }
+
+    /* Info cards */
+    .info-card {
+        padding: 1.2rem;
+        background-color: rgba(255,255,255,0.8);
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        margin-bottom: 1.5rem;
+    }
+
+    /* Prediction result */
+    .prediction {
+        background-color: #ffffffcc;
+        border-left: 6px solid #009688;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-top: 1.2rem;
+        box-shadow: 0px 3px 8px rgba(0,0,0,0.1);
+        font-size: 1.2rem;
+    }
+
+    /* Buttons */
+    div.stButton > button {
+        background: linear-gradient(90deg, #43cea2, #185a9d);
+        color: white;
+        border: none;
+        padding: 0.7rem 1.3rem;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+    div.stButton > button:hover {
+        background: linear-gradient(90deg, #185a9d, #43cea2);
+        transform: scale(1.03);
+    }
+
+    /* Footer or side watermark */
+    .side-text {
+        position: fixed;
+        top: 50%;
+        right: -35px;
+        transform: rotate(-90deg);
+        transform-origin: right top;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: rgba(0, 77, 64, 0.6);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    </style>
+    <div class="side-text">🌿 App by RMS 🌿</div>
+""", unsafe_allow_html=True)
+
+# -------------------- HEADER --------------------
+st.markdown('<div class="title">🌴 Kerala Smart Weather Predictor 🌦️</div>', unsafe_allow_html=True)
+st.markdown("""
+### _Enter your district and date to get a smart weather forecast for Kerala!_  
+Model trained on **20,000+ Kerala weather samples** 🌤️  
 """)
 
 # -------------------- LOAD DATA --------------------
@@ -37,7 +115,6 @@ data["District"] = le_district.fit_transform(data["District"])
 # -------------------- TRAIN MODEL --------------------
 X = data.drop("Weather", axis=1)
 y = data["Weather"]
-
 model = RandomForestClassifier(n_estimators=400, random_state=42, n_jobs=-1)
 model.fit(X, y)
 
@@ -53,48 +130,29 @@ def get_monsoon_phase(day):
         return "Post-Monsoon"
 
 def generate_district_weather(district, day):
-    """Simulate realistic feature values for given district & day"""
-    # district-based baseline climate
     coastal = ["Thiruvananthapuram", "Kollam", "Alappuzha", "Ernakulam", "Kozhikode", "Kannur", "Kasaragod"]
     highland = ["Idukki", "Wayanad"]
     midland = ["Kottayam", "Pathanamthitta", "Thrissur", "Palakkad", "Malappuram"]
 
     monsoon = get_monsoon_phase(day)
-    base_temp = 29
-    base_hum = 80
-    base_precip = 5
-    base_cloud = 60
-    base_wind = 10
+    base_temp, base_hum, base_precip, base_cloud, base_wind = 29, 80, 5, 60, 10
 
     if district in coastal:
-        base_temp -= 1
-        base_hum += 5
-        base_wind += 2
+        base_temp -= 1; base_hum += 5; base_wind += 2
     elif district in highland:
-        base_temp -= 3
-        base_hum -= 2
-        base_precip += 5
+        base_temp -= 3; base_hum -= 2; base_precip += 5
     elif district in midland:
-        base_temp += 0.5
-        base_hum += 1
+        base_temp += 0.5; base_hum += 1
 
-    # Adjust for monsoon phase
     if monsoon == "SouthWest Monsoon":
-        base_precip += 10
-        base_cloud += 15
-        base_hum += 5
+        base_precip += 10; base_cloud += 15; base_hum += 5
     elif monsoon == "NorthEast Monsoon":
-        base_precip += 6
-        base_cloud += 10
+        base_precip += 6; base_cloud += 10
     elif monsoon == "Pre-Monsoon":
-        base_temp += 2
-        base_hum -= 5
-        base_precip -= 3
-    else:  # Post-Monsoon
-        base_precip -= 2
-        base_temp -= 1
+        base_temp += 2; base_hum -= 5; base_precip -= 3
+    else:
+        base_precip -= 2; base_temp -= 1
 
-    # Add small randomness for realism
     temperature = np.random.normal(base_temp, 1.5)
     humidity = np.random.normal(base_hum, 5)
     pressure = np.random.normal(1010, 5)
@@ -113,12 +171,14 @@ def generate_district_weather(district, day):
     }
 
 # -------------------- USER INPUT --------------------
+st.markdown('<div class="info-card">', unsafe_allow_html=True)
 st.subheader("🌏 Enter Prediction Details")
 districts = le_district.classes_
 selected_district = st.selectbox("🏙️ Select District", districts)
 future_date = st.date_input("📅 Select Date", datetime.date.today())
+st.markdown('</div>', unsafe_allow_html=True)
 
-# -------------------- PREDICT --------------------
+# -------------------- PREDICTION --------------------
 if st.button("🔮 Predict Weather"):
     day_of_year = future_date.timetuple().tm_yday
     weather_data = generate_district_weather(selected_district, day_of_year)
@@ -140,9 +200,15 @@ if st.button("🔮 Predict Weather"):
     prediction = model.predict(new_data)
     predicted_label = le_weather.inverse_transform(prediction)[0]
 
-    st.success(f"🌆 **District:** {selected_district}")
-    st.info(f"📅 **Date:** {future_date.strftime('%d %B %Y')} (Day {day_of_year})")
-    st.write(f"🌀 **Monsoon Phase:** {weather_data['MonsoonPhase']}")
-    st.write("🌡️ **Generated Features:**")
+    st.markdown(f"""
+        <div class='prediction'>
+        🌆 <b>District:</b> {selected_district}  
+        📅 <b>Date:</b> {future_date.strftime('%d %B %Y')} (Day {day_of_year})  
+        🌀 <b>Monsoon Phase:</b> {weather_data['MonsoonPhase']}  
+        <br><br>
+        🌈 <b>Predicted Weather:</b> <span style='font-size:1.3rem;color:#00796b;'>{predicted_label}</span>
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("### 🌡️ Generated Weather Features")
     st.json(weather_data)
-    st.subheader(f"🌈 **Predicted Weather:** {predicted_label}")
