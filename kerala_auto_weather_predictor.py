@@ -15,14 +15,14 @@ st.markdown("""
     st.markdown("""
     <style>
     [data-testid="stAppViewContainer"] {
-        background-image: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
+        background-image: url("https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?_gl=1*p98tuv*_ga*NzQ4Mjk5OTI0LjE3NjI0MDYzMjc.*_ga_8JE65Q40S6*czE3NjI0MDYzMjYkbzEkZzAkdDE3NjI0MDYzMjckajU5JGwwJGgw");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
     }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 
     /* Sidebar styling */
@@ -220,5 +220,6 @@ if st.button("🔮 Predict Weather"):
 
     st.markdown("### 🌡️ Generated Weather Features")
     st.json(weather_data)
+
 
 
