@@ -100,7 +100,7 @@ div.stButton > button:hover {
 """, unsafe_allow_html=True)
 
 # -------------------- HEADER --------------------
-st.markdown('<div class="main-title">🌴 Kerala Smart Weather Predictor</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">Kerala Smart Weather Predictor</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Predict the future weather in your Kerala district using AI 🌦️</div>', unsafe_allow_html=True)
 
 # -------------------- LOAD DATA --------------------
@@ -228,3 +228,4 @@ if st.button("🔮 Predict Weather"):
 
 # -------------------- FOOTER --------------------
 st.markdown('<div class="footer-credit">🌿 App by RMS | Designed with ❤️ using Streamlit</div>', unsafe_allow_html=True)
+
