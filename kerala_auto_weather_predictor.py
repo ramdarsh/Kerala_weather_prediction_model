@@ -91,7 +91,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # -------------------- HEADER --------------------
-st.markdown('<div class="title">🌴 Kerala Smart Weather Predictor 🌦️</div>', unsafe_allow_html=True)
+st.markdown('<div class="title">Kerala Smart Weather Predictor</div>', unsafe_allow_html=True)
 st.markdown("""
 ### _Enter your district and date to get a smart weather forecast for Kerala!_  
 Model trained on **20,000+ Kerala weather samples** 🌤️  
@@ -214,6 +214,7 @@ if st.button("🔮 Predict Weather"):
 
     st.markdown("### 🌡️ Generated Weather Features")
     st.json(weather_data)
+
 
 
 
