@@ -6,96 +6,102 @@ from sklearn.preprocessing import LabelEncoder
 import datetime
 
 # -------------------- PAGE CONFIG --------------------
-st.set_page_config(page_title="Kerala Smart Weather Predictor", page_icon="🌦️", layout="centered")
+st.set_page_config(page_title="Kerala Smart Weather Predictor", page_icon="🌦️", layout="wide")
 
-# -------------------- CUSTOM STYLING --------------------
+# -------------------- BACKGROUND & STYLING --------------------
 st.markdown("""
-    <style>
-    [data-testid="stAppViewContainer"] {
-        background-image: url("https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?_gl=1*p98tuv*_ga*NzQ4Mjk5OTI0LjE3NjI0MDYzMjc.*_ga_8JE65Q40S6*czE3NjI0MDYzMjYkbzEkZzAkdDE3NjI0MDYzMjckajU5JGwwJGgw");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-    }
+<style>
+/* ---------- Background Image ---------- */
+[data-testid="stAppViewContainer"] {
+    background-image: url("https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
+}
 
-    /* Sidebar styling */
-    [data-testid="stSidebar"] {
-        background-color: rgba(255,255,255,0.8);
-        backdrop-filter: blur(10px);
-        border-right: 2px solid rgba(255,255,255,0.3);
-    }
+/* ---------- Global Text ---------- */
+body, p, div, span {
+    font-family: 'Segoe UI', sans-serif !important;
+}
 
-    /* Title */
-    .title {
-        text-align: center;
-        font-size: 2.4rem;
-        color: #004d40;
-        font-weight: 700;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-        margin-bottom: 0.2rem;
-    }
+/* ---------- Transparent Containers ---------- */
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+}
 
-    /* Info cards */
-    .info-card {
-        padding: 1.2rem;
-        background-color: rgba(255,255,255,0.8);
-        border-radius: 15px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        margin-bottom: 1.5rem;
-    }
+/* ---------- Titles ---------- */
+.main-title {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.3rem;
+}
+.subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #f5f5f5;
+    margin-bottom: 1.5rem;
+}
 
-    /* Prediction result */
-    .prediction {
-        background-color: #ffffffcc;
-        border-left: 6px solid #009688;
-        border-radius: 12px;
-        padding: 1rem;
-        margin-top: 1.2rem;
-        box-shadow: 0px 3px 8px rgba(0,0,0,0.1);
-        font-size: 1.2rem;
-    }
+/* ---------- Cards ---------- */
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
 
-    /* Buttons */
-    div.stButton > button {
-        background: linear-gradient(90deg, #43cea2, #185a9d);
-        color: white;
-        border: none;
-        padding: 0.7rem 1.3rem;
-        border-radius: 12px;
-        font-size: 1rem;
-        font-weight: 600;
-        transition: 0.3s;
-    }
-    div.stButton > button:hover {
-        background: linear-gradient(90deg, #185a9d, #43cea2);
-        transform: scale(1.03);
-    }
+/* ---------- Buttons ---------- */
+div.stButton > button {
+    width: 100%;
+    background: linear-gradient(90deg, #11998e, #38ef7d);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.3rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+div.stButton > button:hover {
+    background: linear-gradient(90deg, #38ef7d, #11998e);
+    transform: scale(1.02);
+}
 
-    /* Footer or side watermark */
-    .side-text {
-        position: fixed;
-        top: 50%;
-        right: -35px;
-        transform: rotate(-90deg);
-        transform-origin: right top;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: rgba(0, 77, 64, 0.6);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    }
+/* ---------- Prediction Card ---------- */
+.prediction-card {
+    background: rgba(255, 255, 255, 0.85);
+    color: #00332e;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+    margin-top: 2rem;
+}
 
-    </style>
-    <div class="side-text">🌿 App by RMS 🌿</div>
+/* ---------- Side Watermark ---------- */
+.footer-credit {
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.7);
+    margin-top: 3rem;
+    letter-spacing: 1px;
+}
+</style>
 """, unsafe_allow_html=True)
 
 # -------------------- HEADER --------------------
-st.markdown('<div class="title">Kerala Smart Weather Predictor</div>', unsafe_allow_html=True)
-st.markdown("""
-### _Enter your district and date to get a smart weather forecast for Kerala!_  
-Model trained on **20,000+ Kerala weather samples** 🌤️  
-""")
+st.markdown('<div class="main-title">🌴 Kerala Smart Weather Predictor</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Predict the future weather in your Kerala district using AI 🌦️</div>', unsafe_allow_html=True)
 
 # -------------------- LOAD DATA --------------------
 @st.cache_data
@@ -105,7 +111,7 @@ def load_data():
 data = load_data()
 st.success(f"✅ Loaded {len(data)} Kerala weather records successfully!")
 
-# -------------------- ENCODE --------------------
+# -------------------- ENCODING --------------------
 le_weather = LabelEncoder()
 le_monsoon = LabelEncoder()
 le_district = LabelEncoder()
@@ -173,12 +179,16 @@ def generate_district_weather(district, day):
     }
 
 # -------------------- USER INPUT --------------------
-st.markdown('<div class="info-card">', unsafe_allow_html=True)
-st.subheader("🌏 Enter Prediction Details")
-districts = le_district.classes_
-selected_district = st.selectbox("🏙️ Select District", districts)
-future_date = st.date_input("📅 Select Date", datetime.date.today())
-st.markdown('</div>', unsafe_allow_html=True)
+with st.container():
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    st.subheader("🌎 Enter Prediction Details")
+    districts = le_district.classes_
+    col1, col2 = st.columns(2)
+    with col1:
+        selected_district = st.selectbox("🏙️ Select District", districts)
+    with col2:
+        future_date = st.date_input("📅 Select Date", datetime.date.today())
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # -------------------- PREDICTION --------------------
 if st.button("🔮 Predict Weather"):
@@ -203,20 +213,18 @@ if st.button("🔮 Predict Weather"):
     predicted_label = le_weather.inverse_transform(prediction)[0]
 
     st.markdown(f"""
-        <div class='prediction'>
-        🌆 <b>District:</b> {selected_district}  
-        📅 <b>Date:</b> {future_date.strftime('%d %B %Y')} (Day {day_of_year})  
-        🌀 <b>Monsoon Phase:</b> {weather_data['MonsoonPhase']}  
-        <br><br>
-        🌈 <b>Predicted Weather:</b> <span style='font-size:1.3rem;color:#00796b;'>{predicted_label}</span>
-        </div>
+    <div class="prediction-card">
+        <h3>🌤️ Weather Forecast</h3>
+        <p><b>🏙️ District:</b> {selected_district}</p>
+        <p><b>📅 Date:</b> {future_date.strftime('%d %B %Y')} (Day {day_of_year})</p>
+        <p><b>🌀 Monsoon Phase:</b> {weather_data['MonsoonPhase']}</p>
+        <hr>
+        <h4>🌈 Predicted Weather: <span style="color:#00796b;">{predicted_label}</span></h4>
+    </div>
     """, unsafe_allow_html=True)
 
     st.markdown("### 🌡️ Generated Weather Features")
     st.json(weather_data)
 
-
-
-
-
-
+# -------------------- FOOTER --------------------
+st.markdown('<div class="footer-credit">🌿 App by RMS | Designed with ❤️ using Streamlit</div>', unsafe_allow_html=True)
